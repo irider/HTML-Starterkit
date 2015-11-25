@@ -41,7 +41,7 @@ gulp.task('build-styles', function() {
         .pipe($.sourcemaps.write())
         .pipe(gulp.dest('.tmp/styles'))
         // Concatenate and minify styles
-        .pipe($.if('*.css', $.minifyCss()))
+        // .pipe($.if('*.css', $.minifyCss()))
         .pipe($.size({
             title: 'styles'
         }))

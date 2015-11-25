@@ -1,5 +1,8 @@
+'use strict';
+
 var gulp = require('gulp');
 var sass = require('gulp-ruby-sass');
+var sourcemaps = require('gulp-sourcemaps');
 var browserSync = require('browser-sync');
 var fileinclude = require('gulp-file-include');
 // var requireDir = require('require-dir');
@@ -9,13 +12,23 @@ var vinylPaths = require('vinyl-paths');
 var reload = browserSync.reload;
 
 gulp.task('sass', function() {
-  return sass('app/assets/scss/styles.scss')
+  return sass('app/assets/scss/styles.scss', { sourcemap: true })
+
+    .on('error', sass.logError)
+
+    // For file sourcemaps
+    .pipe(sourcemaps.write('maps', {
+      includeContent: false,
+      sourceRoot: 'source'
+    }))
+    
     .pipe(gulp.dest('app/assets/styles'))
     .pipe(reload({ stream:true }));
 });
 
+
 gulp.task('fileinclude', function() {
-  gulp.src(['app/assets/pages/**/*.html'])
+  gulp.src(['app/assets/html/**/*.html'])
     .pipe(fileinclude({
       prefix: '@@',
       basepath: '@file'
@@ -47,7 +60,7 @@ gulp.task('serve', ['sass', 'fileinclude'], function() {
   });
 
   gulp.watch('app/assets/scss/**/*.scss', ['sass']);
-  gulp.watch('app/assets/pages/**/*.html', ['fileinclude']);
+  gulp.watch('app/assets/html/**/*.html', ['fileinclude']);
   gulp.watch(['*.html', 'assets/styles/**/*.css', 'assets/scripts/**/*.js'], {cwd: 'app'}, reload);
   gulp.run('clean-includes');
 });
