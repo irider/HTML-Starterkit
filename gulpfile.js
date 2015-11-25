@@ -21,7 +21,7 @@ gulp.task('sass', function() {
       includeContent: false,
       sourceRoot: 'source'
     }))
-    
+
     .pipe(gulp.dest('app/assets/styles'))
     .pipe(reload({ stream:true }));
 });
